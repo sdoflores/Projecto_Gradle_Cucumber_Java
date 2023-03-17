@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -24,10 +25,10 @@ public class BasePage {
     private static Actions actions;
 
     static {
+        System.setProperty("webdriver.chrome.driver", "./src/test/resources/drivers/chromedriver.exe");
         ChromeOptions chromeOptions = new ChromeOptions();
         driver = new ChromeDriver(chromeOptions);
         wait = new WebDriverWait(driver,Duration.ofSeconds(10));
-        System.setProperty("webdriver.chrome.driver", "./src/test/resources/drivers/chromedriver.exe");
     }
 
     //Estamos creando el constructor para inicializar nuestro driver
@@ -36,10 +37,15 @@ public class BasePage {
         wait = new WebDriverWait(driver,Duration.ofSeconds(10));
     }
 
-    //Creamos demanera estatica para pasarlo a todas las clases sin necesidad
+    //Creamos de manera estatica para pasarlo a todas las clases sin necesidad
     //de declararlo
     public static void navigateTo(String url){
         driver.get(url);
+    }
+
+    //Metodo para cerrar el navegador y todas las vantanas que se abrieron en su ejecucion
+    public static void closeBrowser(){
+        driver.quit();
     }
 
     //Este metodo nos permite buscar un WebElement y esperar el tiempo
@@ -121,7 +127,11 @@ public class BasePage {
 
     //Metodo para cerrar una alerta
     public void didmissAlert(){
-        driver.switchTo().alert().dismiss();
+        try {
+            driver.switchTo().alert().dismiss();
+        }catch (NoAlertPresentException e){
+            e.printStackTrace();
+        }
     }
 
     //Metodo para obtener el texto de un WebElement

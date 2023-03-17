@@ -13,9 +13,9 @@ public class GoogleSteps {
         googlePage.navigateToGoogle();
     }
 
-    @When("^I enter a search criteria$")
-    public void enterSearchCriteria(){
-        googlePage.enterSearchCriteria("google");
+    @When("^I enter a search (.+)$")
+    public void enterSearchCriteria(String criteria){
+        googlePage.enterSearchCriteria(criteria);
     }
 
     @And("^Click on the search button$")
